@@ -8,27 +8,43 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 
 import { GoogleMaps, Geocoder} from '@ionic-native/google-maps';
+import { UserProvider } from '../providers/user/user';
+import { DestinationProvider } from '../providers/destination/destination';
+import { LoginPage } from "../pages/login/login";
+import { HttpModule } from "@angular/http";
+import { MapComponent } from "../components/map/map";
+import { MenuComponent } from "../components/menu/menu";
+import { UserInputPage } from "../pages/user-input/user-input";
+import { ComponentsModule } from "../components/components.module";
 
 @NgModule({
   declarations: [
     MyApp,
-    HomePage
+    LoginPage,
+    HomePage,
+    UserInputPage
   ],
   imports: [
     BrowserModule,
+    HttpModule,
+    ComponentsModule,
     IonicModule.forRoot(MyApp)
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HomePage
+    LoginPage,
+    HomePage,
+    UserInputPage,
   ],
   providers: [
     StatusBar,
     SplashScreen,
     GoogleMaps,
     Geocoder,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    UserProvider,
+    DestinationProvider,
   ]
 })
 export class AppModule {}
