@@ -1,9 +1,3 @@
-<!--
-  Generated template for the UserInputPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
 
   <ion-navbar>
@@ -17,24 +11,33 @@
     <ion-list>       
           <ion-item>
             <ion-label floating>Pick up location</ion-label>
-            <ion-input type="text"></ion-input>
+            <ion-input id="pickup" type="text"></ion-input>
           </ion-item>
         
           <ion-item>
             <ion-label floating>Drop off location</ion-label>
-            <ion-input type="text"></ion-input>
+            <ion-input id="dropoff" type="text"></ion-input>
           </ion-item> 
           <ion-item>
-              <ion-label>Gaming</ion-label>
+              <ion-label>Size</ion-label>
               <ion-select [(ngModel)]="shape">
-                <ion-option value="0">NES</ion-option>
-                <ion-option value="1">Nintendo64</ion-option>
-                <ion-option value="2">PlayStation</ion-option>
+                <ion-option value="0">Cube</ion-option>
+                <ion-option value="1">Sphere</ion-option>
               </ion-select>
             </ion-item>
             <ion-item>
-                <ion-label> Sam</ion-label>
+                <ion-label>Fragile</ion-label>
                 <ion-toggle checked="false"></ion-toggle>
-            </ion-item>    
+            </ion-item>
+            <ion-item>
+                <ion-label>Vehicle type</ion-label>
+                <ion-select [(ngModel)]="vehicleType" multiple="true" cancelText="Cancel" okText="Ok">
+                  <ion-option value="0" selected="true">VAN</ion-option>
+                  <ion-option value="1">Clasic</ion-option>
+                  <ion-option value="2">SUV</ion-option>
+                  <ion-option value="3">Pick-Up</ion-option>
+                  <ion-option value="4">Truck</ion-option>
+                </ion-select>
+              </ion-item>    
         </ion-list>
 </ion-content>

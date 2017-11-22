@@ -1,0 +1,20 @@
+<ion-card id="floating-panel">
+    <ion-card-content>
+      <ion-label>Start</ion-label>
+      <ion-select [(ngModel)]="start" (change)="calculateAndDisplayRoute()">
+        <ion-option value="chicago, il">Chicago</ion-option>
+        <ion-option value="st louis, mo">St Louis</ion-option>
+        <ion-option value="joplin, mo">Joplin, MO</ion-option>
+        <ion-option value="oklahoma city, ok">Oklahoma City</ion-option>
+      </ion-select><br>
+
+      <ion-label>End</ion-label>
+      <ion-select [(ngModel)]="end" (change)="calculateAndDisplayRoute()">
+          <ion-option value="chicago, il">Chicago</ion-option>
+          <ion-option value="st louis, mo">St Louis</ion-option>
+          <ion-option value="joplin, mo">Joplin, MO</ion-option>
+          <ion-option value="oklahoma city, ok">Oklahoma City</ion-option>
+          <ion-option value="amarillo, tx">Amarillo</ion-option>
+      </ion-select>
+    </ion-card-content>
+</ion-card>

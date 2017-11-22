@@ -37,6 +37,7 @@ export class MenuComponent {
   }
 
   changePage() {
+    this.closeMenu();
     this.nav.push(UserInputPage);
   }
 
