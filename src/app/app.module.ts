@@ -17,6 +17,7 @@ import { MenuComponent } from "../components/menu/menu";
 import { UserInputPage } from "../pages/user-input/user-input";
 import { ComponentsModule } from "../components/components.module";
 import { Geolocation } from '@ionic-native/geolocation';
+import { Push } from '@ionic-native/push';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { Geolocation } from '@ionic-native/geolocation';
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     UserProvider,
     DestinationProvider,
-    Geolocation
+    Geolocation,
+    Push
   ]
 })
 export class AppModule {}
