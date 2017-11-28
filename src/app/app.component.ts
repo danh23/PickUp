@@ -6,7 +6,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { HomePage } from '../pages/home/home';
 import { LoginPage } from "../pages/login/login";
 import { UserInputPage } from "../pages/user-input/user-input";
-declare var cordova: any;
+declare var cordova: any, PushNotification: any;
 
 @Component({
   templateUrl: 'app.html'
@@ -34,6 +34,7 @@ export class MyApp {
       this.statusBar.styleDefault();
       this.splashScreen.hide(); 
       this.listenToNotificationEvents();
+      this.initFCM();
     });
   }
 
@@ -41,6 +42,38 @@ export class MyApp {
     cordova.plugins.notification.local.on('click', function (notification, eopts) {
       console.log(notification);
       console.log(eopts);
+    });
+  }
+
+  initFCM() {
+    const push = PushNotification.init({
+      android: {
+      },
+      ios: {
+        alert: "true",
+        badge: true,
+        sound: 'false'
+      },
+    });
+
+    push.on('registration', (data) => {
+      console.log("FCM registrationID: " + data.registrationId);
+      console.log("FCM registrationType: " + data.registrationType);
+      push.subscribe('JavaSampleApproach', () => {
+        console.log('success');
+      }, (e) => {
+        console.log('error:', e);
+      });
+    });
+
+    push.on('notification', (data) => {
+      console.log("notification received");
+      console.log(data.message);
+      console.log(data.title);
+      console.log(data.count);
+      console.log(data.sound);
+      console.log(data.image);
+      console.log(data.additionalData);
     });
   }
 

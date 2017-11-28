@@ -9,6 +9,7 @@ import {
   Marker
  } from '@ionic-native/google-maps';
  import { Geolocation } from '@ionic-native/geolocation';
+ import { LaunchNavigator, LaunchNavigatorOptions } from "@ionic-native/launch-navigator";
 
  declare var google: any;
 /**
@@ -50,7 +51,11 @@ export class MapComponent implements OnInit{
     mapType: 'MAP_TYPE_ROADMAP'
   };
   mapElement: HTMLElement;
-  constructor(private googleMaps: GoogleMaps, private geolocation: Geolocation) { }
+  navigatorOptions: LaunchNavigatorOptions = {
+    //app: this.launchNavigator.APP.GOOGLE_MAPS,
+    transportMode: this.launchNavigator.TRANSPORT_MODE.DRIVING
+  };
+  constructor(private googleMaps: GoogleMaps, private geolocation: Geolocation, private launchNavigator: LaunchNavigator) { }
 
   ngOnInit() {
     console.log("map view loaded");
@@ -150,6 +155,11 @@ export class MapComponent implements OnInit{
           } else {
             window.alert('Directions request failed due to ' + status);
           }
+          this.launchNavigator.navigate(this.end, this.navigatorOptions)
+          .then(
+            success => console.log('Launched navigator'),
+            error => console.log('Error launching navigator', error)
+          );
         });
       }
 
