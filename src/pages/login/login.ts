@@ -4,6 +4,8 @@ import { UserProvider } from "../../providers/user/user";
 import { User } from "../../shared/user/user";
 import { HomePage } from "../home/home";
 
+declare var facebookConnectPlugin: any;
+
 @Component({
   selector: 'page-login',
   templateUrl: 'login.html',
@@ -59,6 +61,14 @@ export class LoginPage {
         },
         () => alert("Unfortunately we were unable to create your account.")
       );
+  }
+
+  fbLogin() {
+    facebookConnectPlugin.login(["public_profile"], function(userData) {
+      console.log("UserInfo: ", userData);
+    }, function(error) {
+      console.error(error);
+    })
   }
 
 }

@@ -30,6 +30,18 @@
                 <ion-toggle checked="false"></ion-toggle>
             </ion-item>
             <ion-item>
+                <ion-label floating>Height</ion-label>
+                <ion-input id="height" type="number"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label floating>Width</ion-label>
+                <ion-input id="width" type="number"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label floating>Length</ion-label>
+                <ion-input id="length" type="number"></ion-input>
+            </ion-item>
+            <ion-item>
                 <ion-label>Vehicle type</ion-label>
                 <ion-select [(ngModel)]="vehicleType" multiple="true" cancelText="Cancel" okText="Ok">
                   <ion-option value="0" selected="true">VAN</ion-option>
