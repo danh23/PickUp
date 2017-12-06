@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+declare var google: any;
 
 /**
  * Generated class for the MapControlsComponent component.
@@ -12,10 +13,23 @@ import { Component } from '@angular/core';
 })
 export class MapControlsComponent {
 
-  start = 'chicago, il';
-  end = 'chicago, il';
+  start = 'bucuresti';
+  end = 'pitesti';
+
+  startLocationInput: HTMLInputElement;
+  startAutocomplete: any;
+  endLocationInput: HTMLInputElement;
+  endAutocomplete: any;
 
   constructor() {
+  }
+
+  ionViewDidLoad() {
+    console.log('ionViewDidLoad UserInputPage'); 
+    this.startLocationInput = <HTMLInputElement>document.getElementById('pickup').getElementsByTagName('input')[0];
+    this.startAutocomplete = new google.maps.places.Autocomplete(this.startLocationInput);
+    this.endLocationInput = <HTMLInputElement>document.getElementById('dropoff').getElementsByTagName('input')[0];
+    this.endAutocomplete = new google.maps.places.Autocomplete(this.endLocationInput);
   }
 
   calculateAndDisplayRoute() {

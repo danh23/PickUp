@@ -1,28 +1,16 @@
-<ion-card>
+<ion-card id="floating-panel">
     <ion-card-content>
         <ion-list>       
             <ion-item>
-                <ion-label>Vehicle type</ion-label>
-                <ion-select [(ngModel)]="start">
-                  <ion-option value="0" selected="true">VAN</ion-option>
-                  <ion-option value="1">Clasic</ion-option>
-                  <ion-option value="2">SUV</ion-option>
-                  <ion-option value="3">Pick-Up</ion-option>
-                  <ion-option value="4">Truck</ion-option>
-                </ion-select>
-            </ion-item>
+                <ion-label floating>Pick up location</ion-label>
+                <ion-input id="pickup" type="text" [(ngModel)]="start"></ion-input>
+            </ion-item>      
             <ion-item>
-                <ion-label>Vehicle type</ion-label>
-                <ion-select [(ngModel)]="end">
-                  <ion-option value="0" selected="true">VAN</ion-option>
-                  <ion-option value="1">Clasic</ion-option>
-                  <ion-option value="2">SUV</ion-option>
-                  <ion-option value="3">Pick-Up</ion-option>
-                  <ion-option value="4">Truck</ion-option>
-                </ion-select>
+                <ion-label floating>Drop off location</ion-label>
+                <ion-input id="dropoff" type="text" [(ngModel)]="end"></ion-input>
             </ion-item>
         </ion-list>
-        <button ion-button (tap)="calculateAndDisplayRoute()">Button</button>
+        <button ion-button (tap)="calculateAndDisplayRoute()">Navigate</button>
     </ion-card-content>
 </ion-card>
 <div #map id="map"></div>
