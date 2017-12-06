@@ -3,13 +3,16 @@ import { MapComponent } from "./map/map";
 import { MenuComponent } from "./menu/menu";
 import { AppModule } from "../app/app.module";
 import { MapControlsComponent } from './map-controls/map-controls';
+import { IonicModule } from "ionic-angular";
 @NgModule({
 	declarations: [
 		MapComponent,
 		MenuComponent,
     MapControlsComponent,
 	],
-	imports: [],
+	imports: [
+		IonicModule
+	],
 	exports: [
 		MapComponent,
 		MenuComponent,
