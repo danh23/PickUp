@@ -10,6 +10,7 @@ import {
  } from '@ionic-native/google-maps';
  import { Geolocation } from '@ionic-native/geolocation';
  import { LaunchNavigator, LaunchNavigatorOptions } from "@ionic-native/launch-navigator";
+ import { SharedService } from "../../shared/shared-service";
 
  declare var google: any;
 /**
@@ -55,7 +56,12 @@ export class MapComponent implements OnInit{
     //app: this.launchNavigator.APP.GOOGLE_MAPS,
     transportMode: this.launchNavigator.TRANSPORT_MODE.DRIVING
   };
-  constructor(private googleMaps: GoogleMaps, private geolocation: Geolocation, private launchNavigator: LaunchNavigator) { }
+  constructor(private googleMaps: GoogleMaps, private geolocation: Geolocation, private launchNavigator: LaunchNavigator, private sharedService: SharedService) {
+    this.sharedService.sendOrder$.subscribe(order => {
+      this.end = order.dropoff;
+      this.calculateAndDisplayRoute();
+    });
+   }
 
   ngOnInit() {
     console.log("map view loaded");

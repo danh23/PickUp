@@ -1,5 +1,7 @@
 import { Component, ViewChild, ElementRef, AfterViewInit, Output, EventEmitter } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Order } from "../../shared/order/order";
+import { SharedService } from "../../shared/shared-service";
 declare var google: any;
 
 /**
@@ -24,9 +26,9 @@ export class UserInputPage{
   @Output() 
   placesUpdated = new EventEmitter();
 
-  shape: number;
+  inputs: Order = new Order();
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private sharedService: SharedService) {
   }
 
   ionViewDidLoad() {
@@ -38,7 +40,10 @@ export class UserInputPage{
   }
 
   sendOrder() {
+    console.log(this.inputs);
     this.placesUpdated.emit("");
+    this.sharedService.publishData(this.inputs);
+    this.navCtrl.pop();
   }
   
 }

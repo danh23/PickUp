@@ -4,6 +4,7 @@ import { MenuComponent } from "./menu/menu";
 import { AppModule } from "../app/app.module";
 import { MapControlsComponent } from './map-controls/map-controls';
 import { IonicModule } from "ionic-angular";
+import { SharedService } from "../shared/shared-service";
 @NgModule({
 	declarations: [
 		MapComponent,
@@ -18,6 +19,8 @@ import { IonicModule } from "ionic-angular";
 		MenuComponent,
     MapControlsComponent,
 	],
-	schemas: [CUSTOM_ELEMENTS_SCHEMA]
+	providers: [
+		SharedService
+	]
 })
 export class ComponentsModule {}

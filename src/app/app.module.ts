@@ -30,7 +30,11 @@ import { LaunchNavigator } from '@ionic-native/launch-navigator';
     BrowserModule,
     HttpModule,
     ComponentsModule,
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp, {
+      scrollPadding: false,
+      scrollAssist: true,
+      autoFocusAssist: false
+    })
   ],
   bootstrap: [IonicApp],
   entryComponents: [

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { MenuController, IonicPage } from 'ionic-angular';
+import { SharedService } from "../../shared/shared-service";
 declare var cordova: any;
 
 @Component({
@@ -9,8 +10,7 @@ declare var cordova: any;
 })
 export class HomePage {
 
-  constructor(public navCtrl: NavController) {
-
+  constructor(public navCtrl: NavController, private sharedService: SharedService) {
   }
 
   ionViewDidLoad() { 
