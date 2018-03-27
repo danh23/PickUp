@@ -11,13 +11,15 @@ import { GoogleMaps, Geocoder} from '@ionic-native/google-maps';
 import { UserProvider } from '../providers/user/user';
 import { DestinationProvider } from '../providers/destination/destination';
 import { LoginPage } from "../pages/login/login";
-import { HttpModule } from "@angular/http";
+import { HttpModule, RequestOptions } from "@angular/http";
 import { MapComponent } from "../components/map/map";
 import { MenuComponent } from "../components/menu/menu";
 import { UserInputPage } from "../pages/user-input/user-input";
 import { ComponentsModule } from "../components/components.module";
 import { Geolocation } from '@ionic-native/geolocation';
 import { LaunchNavigator } from '@ionic-native/launch-navigator';
+import { Interceptor } from "../config/interceptor";
+import { OrderService } from "../shared/order/order-service";
 
 @NgModule({
   declarations: [
@@ -52,7 +54,9 @@ import { LaunchNavigator } from '@ionic-native/launch-navigator';
     UserProvider,
     DestinationProvider,
     Geolocation,
-    LaunchNavigator
+    LaunchNavigator,
+    OrderService,
+    {provide: RequestOptions, useClass: Interceptor},
   ]
 })
 export class AppModule {}

@@ -1,21 +1,39 @@
 export class Order {
     
-        pickup: string;
-        dropoff: string;
-        pickupDate: Date;
-        size: Size;
-        fragile: boolean;
-        vehicleType: number;
-        image: string;
+    userId: number;
+    title: string;
+    pickUpAddress: string;
+    dropOffAddress: string;
+    pickUpLocation: Location;
+    dropOffLocation: Location;
+    pickupDate: Date;
+    dropOffDate: Date;
+    dimension: Dimension;
+    fragile: boolean;
+    vehicleType: number;
+    image: string;
 
-        constructor() {
-            this.size = new Size();
-        }
+    constructor() {
+        this.dimension = new Dimension();
+        this.pickUpLocation = new Location();
+        this.dropOffLocation = new Location();
+    }
 }
-    
-export class Size {
 
-    height: number;
+export class Location{
+
+    latitude: number;
+    longitude: number;
+}
+
+export class Dimension{
+
     width: number;
+    height: number;
     length: number;
+}
+
+export class OrdersInAreaRequest{
+    location: Location;
+    offset: number;
 }

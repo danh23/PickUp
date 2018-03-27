@@ -1,7 +1,8 @@
-import { Component, ViewChild, ElementRef, AfterViewInit, Output, EventEmitter } from '@angular/core';
+import { Component, ViewChild, ElementRef, AfterViewInit, Output, EventEmitter, OnInit } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Order } from "../../shared/order/order";
 import { SharedService } from "../../shared/shared-service";
+import { OrderService } from "../../shared/order/order-service";
 declare var google: any;
 
 /**
@@ -16,7 +17,8 @@ declare var google: any;
   selector: 'page-user-input',
   templateUrl: 'user-input.html',
 })
-export class UserInputPage{
+export class UserInputPage {
+
 
   startLocationInput: HTMLInputElement;
   startAutocomplete: any;
@@ -28,7 +30,7 @@ export class UserInputPage{
 
   inputs: Order = new Order();
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private sharedService: SharedService) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private sharedService: SharedService, private orderService: OrderService) {
   }
 
   ionViewDidLoad() {
@@ -41,9 +43,14 @@ export class UserInputPage{
 
   sendOrder() {
     console.log(this.inputs);
-    this.placesUpdated.emit("");
-    this.sharedService.publishData(this.inputs);
-    this.navCtrl.pop();
+    this.inputs.userId = 1;
+    this.orderService.createOrder(this.inputs).subscribe(res => {
+      this.placesUpdated.emit("");
+      this.sharedService.publishData(this.inputs);
+      this.navCtrl.pop();
+      
+    }, (err)=> {console.log('Eroare' + err)});
+
   }
   
 }

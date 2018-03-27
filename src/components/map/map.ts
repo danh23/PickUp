@@ -58,7 +58,7 @@ export class MapComponent implements OnInit{
   };
   constructor(private googleMaps: GoogleMaps, private geolocation: Geolocation, private launchNavigator: LaunchNavigator, private sharedService: SharedService) {
     this.sharedService.sendOrder$.subscribe(order => {
-      this.end = order.dropoff;
+      this.end = order.dropOffAddress;
       this.calculateAndDisplayRoute();
     });
    }

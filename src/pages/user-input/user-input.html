@@ -9,44 +9,42 @@
 
 <ion-content padding>
     <ion-list>       
-          <ion-item>
-            <ion-label floating>Pick up location</ion-label>
-            <ion-input id="pickup" type="text" [(ngModel)]="inputs.pickup"></ion-input>
-          </ion-item>
-          <ion-item>
-              <ion-label>Date</ion-label>
-              <ion-datetime displayFormat="MM/DD/YYYY" min="2017" [(ngModel)]="inputs.pickupDate"></ion-datetime>
-          </ion-item>
-          <ion-item>
-            <ion-label floating>Drop off location</ion-label>
-            <ion-input id="dropoff" type="text" [(ngModel)]="inputs.dropoff"></ion-input>
-          </ion-item> 
-          <ion-item>
-              <ion-label floating>Height</ion-label>
-              <ion-input type="number" [(ngModel)]="inputs.size.height"></ion-input>
-          </ion-item>
-          <ion-item>
-              <ion-label floating>Width</ion-label>
-              <ion-input type="number" [(ngModel)]="inputs.size.width"></ion-input>
-          </ion-item>
-          <ion-item>
-              <ion-label floating>Length</ion-label>
-              <ion-input type="number" [(ngModel)]="inputs.size.length"></ion-input>
-          </ion-item>
-          <ion-item>
-              <ion-label>Fragile</ion-label>
-              <ion-toggle checked="false" [(ngModel)]="inputs.fragile"></ion-toggle>
-          </ion-item>
-          <ion-item>
-              <ion-label>Vehicle type</ion-label>
-              <ion-select [(ngModel)]="inputs.vehicleType" cancelText="Cancel" okText="Ok">
-                <ion-option value="0" selected="true">VAN</ion-option>
-                <ion-option value="1">Clasic</ion-option>
-                <ion-option value="2">SUV</ion-option>
-                <ion-option value="3">Pick-Up</ion-option>
-                <ion-option value="4">Truck</ion-option>
-              </ion-select>
-            </ion-item>
-            <button ion-button (tap)="sendOrder()">Send</button>  
-        </ion-list>
+        <ion-item>
+            <ion-label floating>Title</ion-label>
+            <ion-input id="title" type="text" [(ngModel)]="inputs.title"></ion-input>
+        </ion-item>
+        <ion-item>
+        <ion-label floating>Pick up location</ion-label>
+        <ion-input id="pickup" type="text" [(ngModel)]="inputs.pickUpAddress"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label>PickUp Date</ion-label>
+            <ion-datetime displayFormat="MM/DD/YYYY" min="2017" [(ngModel)]="inputs.pickUpDate"></ion-datetime>
+        </ion-item>
+        <ion-item>
+            <ion-label>DropOff Date</ion-label>
+            <ion-datetime displayFormat="MM/DD/YYYY" min="2017" [(ngModel)]="inputs.dropOffDate"></ion-datetime>
+        </ion-item>
+        <ion-item>
+        <ion-label floating>Drop off location</ion-label>
+        <ion-input id="dropoff" type="text" [(ngModel)]="inputs.dropOffAddress"></ion-input>
+        </ion-item> 
+        <ion-item>
+            <ion-label floating>Height</ion-label>
+            <ion-input type="number" [(ngModel)]="inputs.dimension.height"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label floating>Width</ion-label>
+            <ion-input type="number" [(ngModel)]="inputs.dimension.width"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label floating>Length</ion-label>
+            <ion-input type="number" [(ngModel)]="inputs.dimension.length"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label>Fragile</ion-label>
+            <ion-toggle checked="false" [(ngModel)]="inputs.fragile"></ion-toggle>
+        </ion-item>
+        <button ion-button (tap)="sendOrder()">Send</button>  
+    </ion-list>
 </ion-content>
