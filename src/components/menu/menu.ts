@@ -2,6 +2,8 @@ import { Component, Input, ViewChild } from '@angular/core';
 import { MenuController } from "ionic-angular";
 import { NavController } from 'ionic-angular';
 import { UserInputPage } from "../../pages/user-input/user-input";
+import { LocalDataService } from "../../shared/local-data.service";
+import { LoginPage } from "../../pages/login/login";
 
 /**
  * Generated class for the MenuComponent component.
@@ -22,7 +24,7 @@ export class MenuComponent {
   
   text: string;
 
-  constructor(public menuCtrl: MenuController) {}
+  constructor(public menuCtrl: MenuController, private localData: LocalDataService) {}
 
   openMenu() {
     this.menuCtrl.open();
@@ -39,6 +41,12 @@ export class MenuComponent {
   changePage() {
     this.closeMenu();
     this.nav.push(UserInputPage);
+  }
+
+  logout() {
+    this.closeMenu();
+    this.localData.logout();
+    this.nav.push(LoginPage);
   }
 
 }

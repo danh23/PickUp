@@ -1,8 +1,9 @@
 import { Component, ViewChild, ElementRef, AfterViewInit, Output, EventEmitter, OnInit } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { Order } from "../../shared/order/order";
+import { Order, Location } from "../../shared/order/order";
 import { SharedService } from "../../shared/shared-service";
 import { OrderService } from "../../shared/order/order-service";
+import { LocalDataService } from "../../shared/local-data.service";
 declare var google: any;
 
 /**
@@ -19,7 +20,6 @@ declare var google: any;
 })
 export class UserInputPage {
 
-
   startLocationInput: HTMLInputElement;
   startAutocomplete: any;
   endLocationInput: HTMLInputElement;
@@ -29,8 +29,9 @@ export class UserInputPage {
   placesUpdated = new EventEmitter();
 
   inputs: Order = new Order();
+  geocode = new google.maps.Geocoder;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private sharedService: SharedService, private orderService: OrderService) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private sharedService: SharedService, private orderService: OrderService, private localData: LocalDataService) {
   }
 
   ionViewDidLoad() {
@@ -42,15 +43,29 @@ export class UserInputPage {
   }
 
   sendOrder() {
-    console.log(this.inputs);
-    this.inputs.userId = 1;
-    this.orderService.createOrder(this.inputs).subscribe(res => {
-      this.placesUpdated.emit("");
-      this.sharedService.publishData(this.inputs);
-      this.navCtrl.pop();
-      
-    }, (err)=> {console.log('Eroare' + err)});
+    this.inputs.userId = this.localData.getUser().id;
+    this.geocode.geocode({
+      "address": this.inputs.pickUpAddress
+      }, (results) => {
+        if(results.length){
+          this.inputs.pickUpLocation.latitude = results[0].geometry.location.lat();
+          this.inputs.pickUpLocation.longitude = results[0].geometry.location.lng();
 
-  }
-  
+          this.geocode.geocode({
+            "address": this.inputs.dropOffAddress
+            }, (results) => {
+              if(results.length){
+                this.inputs.dropOffLocation.latitude = results[0].geometry.location.lat();
+                this.inputs.dropOffLocation.longitude = results[0].geometry.location.lng();
+                this.orderService.createOrder(this.inputs).subscribe(res => {
+                  this.placesUpdated.emit("");
+                  this.sharedService.publishData(this.inputs);
+                  this.navCtrl.pop();
+          
+                }, (err)=> {console.log('Eroare' + err)});
+              }
+          });
+        }
+    });
+  }  
 }

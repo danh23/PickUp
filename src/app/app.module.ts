@@ -20,6 +20,7 @@ import { Geolocation } from '@ionic-native/geolocation';
 import { LaunchNavigator } from '@ionic-native/launch-navigator';
 import { Interceptor } from "../config/interceptor";
 import { OrderService } from "../shared/order/order-service";
+import { LocalDataService } from "../shared/local-data.service";
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { OrderService } from "../shared/order/order-service";
     UserInputPage,
   ],
   providers: [
+    LocalDataService,
     StatusBar,
     SplashScreen,
     GoogleMaps,
