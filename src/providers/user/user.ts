@@ -16,7 +16,7 @@ export class UserProvider {
     constructor(private http: Http) {}
 
     register(user: User) {
-      let url = Config.apiUrl + endpoints.createOrder
+      let url = Config.apiUrl + endpoints.createUser
       let result = this.http.post(url, user, this.options)
       .map((response: Response) => <number>response.json())
       .do(data => console.log("Do data: " + JSON.stringify(data)))

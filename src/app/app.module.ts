@@ -9,7 +9,6 @@ import { HomePage } from '../pages/home/home';
 
 import { GoogleMaps, Geocoder} from '@ionic-native/google-maps';
 import { UserProvider } from '../providers/user/user';
-import { DestinationProvider } from '../providers/destination/destination';
 import { LoginPage } from "../pages/login/login";
 import { HttpModule, RequestOptions } from "@angular/http";
 import { MapComponent } from "../components/map/map";
@@ -54,7 +53,6 @@ import { LocalDataService } from "../shared/local-data.service";
     Geocoder,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     UserProvider,
-    DestinationProvider,
     Geolocation,
     LaunchNavigator,
     OrderService,

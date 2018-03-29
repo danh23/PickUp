@@ -26,7 +26,7 @@ export class MyApp {
     ];
 
     this.initCordova(() => {
-      if(localData.checkIsLoggedIn() === "true"){
+      if(this.localData.checkIsLoggedIn() === "true"){
         this.rootPage = HomePage;
       }
     });

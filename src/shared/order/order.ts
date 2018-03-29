@@ -1,5 +1,6 @@
 export class Order {
     
+    id: number;
     userId: number;
     title: string;
     pickUpAddress: string;
@@ -8,13 +9,13 @@ export class Order {
     dropOffLocation: Location;
     pickupDate: Date;
     dropOffDate: Date;
-    dimension: Dimension;
+    dimensions: Dimension;
     fragile: boolean;
     vehicleType: number;
     image: string;
 
     constructor() {
-        this.dimension = new Dimension();
+        this.dimensions = new Dimension();
         this.pickUpLocation = new Location();
         this.dropOffLocation = new Location();
     }
