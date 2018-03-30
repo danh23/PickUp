@@ -6,11 +6,14 @@ import {
   GoogleMapOptions,
   CameraPosition,
   MarkerOptions,
-  Marker
+  Marker,
+  ILatLng,
+  Polyline
  } from '@ionic-native/google-maps';
  import { Geolocation } from '@ionic-native/geolocation';
  import { LaunchNavigator, LaunchNavigatorOptions } from "@ionic-native/launch-navigator";
  import { SharedService } from "../../shared/shared-service";
+ import { DriverToClientNotification, Location, Order } from "../../shared/order/order";
 
  declare var google: any;
 /**
@@ -25,8 +28,7 @@ import {
 })
 export class MapComponent implements OnInit{
 
-  start = 'bucuresti';
-  end = 'vaslui';
+  end: any;
   map: GoogleMap;
   myLocation = {
     lat: 0,
@@ -52,15 +54,20 @@ export class MapComponent implements OnInit{
     mapType: 'MAP_TYPE_ROADMAP'
   };
   mapElement: HTMLElement;
-  navigatorOptions: LaunchNavigatorOptions = {
-    //app: this.launchNavigator.APP.GOOGLE_MAPS,
-    transportMode: this.launchNavigator.TRANSPORT_MODE.DRIVING
-  };
-  constructor(private googleMaps: GoogleMaps, private geolocation: Geolocation, private launchNavigator: LaunchNavigator, private sharedService: SharedService) {
+  polyline: Polyline;
+  marker: Marker;
+
+  order: Order = new Order();
+
+  constructor(private googleMaps: GoogleMaps, private geolocation: Geolocation, private sharedService: SharedService) {
     this.sharedService.sendOrder$.subscribe(order => {
       this.end = order.dropOffAddress;
-      this.calculateAndDisplayRoute();
+      this.order = order;
     });
+    this.sharedService.orderTakenNotification$.subscribe(
+      (res: DriverToClientNotification)=>{
+        this.displayRoute({lat: res.driverLocation.latitude, lng: res.driverLocation.longitude}, {lat: this.order.pickUpLocation.latitude, lng: this.order.pickUpLocation.longitude});
+      });
    }
 
   ngOnInit() {
@@ -96,6 +103,9 @@ export class MapComponent implements OnInit{
   }
 
   addMarker(latLng) {
+      if(this.marker !== undefined){
+        this.marker.remove();
+      }
       console.log("add marker");
       console.log(latLng);
       this.map.addMarker({
@@ -105,6 +115,7 @@ export class MapComponent implements OnInit{
         position: {lat: latLng.lat, lng: latLng.lng}
       })
       .then(marker => {
+        this.marker = marker;
         marker.on(GoogleMapsEvent.MARKER_CLICK)
           .subscribe(() => {
             alert('clicked');
@@ -112,12 +123,21 @@ export class MapComponent implements OnInit{
       });
     }
 
-  moveCamera(location) {
+  moveCamera(location: ILatLng) {
     this.mapOptions.camera.target.lat = location.lat;
     this.mapOptions.camera.target.lng = location.lng;
     console.log(location);
     this.map.moveCamera(this.mapOptions.camera).then(()=>{
-      this.addMarker(location);
+      console.log("camera moved");
+    });
+  }
+
+  moveCameraWithAnimation(location: ILatLng) {
+    this.mapOptions.camera.target.lat = location.lat;
+    this.mapOptions.camera.target.lng = location.lng;
+    this.mapOptions.camera.duration = 2000;
+    console.log(location);
+    this.map.animateCamera(this.mapOptions.camera).then(()=>{
       console.log("camera moved");
     });
   }
@@ -134,39 +154,39 @@ export class MapComponent implements OnInit{
     });
   }
 
-  calculateAndDisplayRoute() {
-      console.log("navigate");
-        this.directionsService.route({
-          origin: {lat: this.myLocation.lat, lng: this.myLocation.lng},
-          destination: this.end,
-          travelMode: 'DRIVING'
-        }, (response, status) => {
-          debugger;
-          console.log(response);
-          if (status === 'OK') {
-            let points = [];
-            let steps = response.routes[0].legs[0].steps;
-            steps.forEach(step => {
-              step.path.forEach(point => {
-                points.push({lat: point.lat(), lng: point.lng()})
-              });
-            });
-            this.map.addPolyline({
-              "points": points,
-              color: "black",
-              width: 10
-            }).then((polyline) => {
-              console.log(polyline);
-            }) 
-          } else {
-            window.alert('Directions request failed due to ' + status);
-          }
-          this.launchNavigator.navigate(this.end, this.navigatorOptions)
-          .then(
-            success => console.log('Launched navigator'),
-            error => console.log('Error launching navigator', error)
-          );
+  displayRoute(start: ILatLng, end: ILatLng){
+    if(this.polyline !== undefined){
+      this.polyline.remove();
+    }
+    this.directionsService.route({
+      origin: start,
+      destination: end,
+      travelMode: 'DRIVING'
+    }, (response, status) => {
+      debugger;
+      console.log(response);
+      if (status === 'OK') {
+        let points = [];
+        let steps = response.routes[0].legs[0].steps;
+        steps.forEach(step => {
+          step.path.forEach(point => {
+            points.push({lat: point.lat(), lng: point.lng()})
+          });
         });
+        this.map.addPolyline({
+          "points": points,
+          color: "black",
+          width: 10
+        }).then((polyline) => {
+          console.log(polyline);
+          this.polyline = polyline
+          this.moveCameraWithAnimation(start);
+          this.addMarker(start);
+        }) 
+      } else {
+        window.alert('Directions request failed due to ' + status);
       }
+    });
+  }
 
 }

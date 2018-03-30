@@ -1,9 +1,10 @@
 import { Component, ViewChild, ElementRef, AfterViewInit, Output, EventEmitter, OnInit } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
 import { Order, Location } from "../../shared/order/order";
 import { SharedService } from "../../shared/shared-service";
 import { OrderService } from "../../shared/order/order-service";
 import { LocalDataService } from "../../shared/local-data.service";
+import { MyOrdersPage } from "../my-orders/my-orders";
 declare var google: any;
 
 /**
@@ -25,13 +26,15 @@ export class UserInputPage {
   endLocationInput: HTMLInputElement;
   endAutocomplete: any;
 
-  @Output() 
-  placesUpdated = new EventEmitter();
-
   inputs: Order = new Order();
   geocode = new google.maps.Geocoder;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private sharedService: SharedService, private orderService: OrderService, private localData: LocalDataService) {
+  constructor(public navCtrl: NavController,
+     public navParams: NavParams,
+      private sharedService: SharedService,
+       private orderService: OrderService,
+        private localData: LocalDataService,
+        public toastCtrl: ToastController) {
   }
 
   ionViewDidLoad() {
@@ -58,14 +61,25 @@ export class UserInputPage {
                 this.inputs.dropOffLocation.latitude = results[0].geometry.location.lat();
                 this.inputs.dropOffLocation.longitude = results[0].geometry.location.lng();
                 this.orderService.createOrder(this.inputs).subscribe(res => {
-                  this.placesUpdated.emit("");
-                  this.sharedService.publishData(this.inputs);
-                  this.navCtrl.pop();
-          
+
+                  this.presentToast().onDidDismiss((data, role)=>{
+                    this.sharedService.publishData(this.inputs);
+                    this.navCtrl.pop();
+                  });    
                 }, (err)=> {console.log('Eroare' + err)});
               }
           });
         }
     });
   }  
+
+  presentToast() {
+    let toast = this.toastCtrl.create({
+      message: 'Order was added successfully',
+      showCloseButton: true,
+      closeButtonText: "OK"
+    });
+    toast.present();
+    return toast;
+  }
 }

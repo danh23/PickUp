@@ -99,4 +99,5 @@
         <variable name="APP_ID" value="340118349727136" />
         <variable name="APP_NAME" value="PickUp" />
     </plugin>
+    <plugin name="cordova-plugin-android-permissions" spec="^1.0.0" />
 </widget>

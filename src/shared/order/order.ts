@@ -38,3 +38,15 @@ export class OrdersInAreaRequest{
     location: Location;
     offset: number;
 }
+
+export class DriverToClientNotification {
+    topic: string;
+    driverId: number;
+    orderId: number;
+    orderTitle: string;
+    driverLocation: Location;
+
+    constructor(){
+        this.driverLocation = new Location();
+    }
+}

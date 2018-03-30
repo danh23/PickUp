@@ -1,7 +1,8 @@
 export const endpoints = {
         createOrder: "/order/create",
-        getOrdersByUserId: "/order/getOrderByUserId",
+        getOrdersByUserId: "/order/getOrdersByUserId",
         getOrderById: "/order/getOrderById",
+        deleteOrderById: "/order/deleteById",
 
         createUser: "/user/create",
         getUserByEmail: "/user/getUserByEmail",

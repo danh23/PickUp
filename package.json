@@ -20,6 +20,7 @@
     "@angular/http": "4.4.3",
     "@angular/platform-browser": "4.4.3",
     "@angular/platform-browser-dynamic": "4.4.3",
+    "@ionic-native/android-permissions": "^4.6.0",
     "@ionic-native/core": "4.3.0",
     "@ionic-native/geolocation": "4.4.2",
     "@ionic-native/google-maps": "4.3.0",
@@ -29,6 +30,7 @@
     "@ionic/storage": "2.0.1",
     "cordova-android": "6.2.3",
     "cordova-plugin-actionsheet": "2.3.3",
+    "cordova-plugin-android-permissions": "^1.0.0",
     "cordova-plugin-app-event": "file:node_modules\\cordova-plugin-app-event",
     "cordova-plugin-compat": "1.0.0",
     "cordova-plugin-device": "1.1.4",
@@ -74,7 +76,8 @@
       "cordova-plugin-facebook4": {
         "APP_ID": "340118349727136",
         "APP_NAME": "PickUp"
-      }
+      },
+      "cordova-plugin-android-permissions": {}
     },
     "platforms": [
       "android"

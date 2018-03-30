@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { MenuController, IonicPage } from 'ionic-angular';
 import { SharedService } from "../../shared/shared-service";
-declare var cordova: any;
+import { LocalDataService } from "../../shared/local-data.service";
+declare var cordova: any, PushNotification: any;
 
 @Component({
   selector: 'page-home',
@@ -10,7 +11,7 @@ declare var cordova: any;
 })
 export class HomePage {
 
-  constructor(public navCtrl: NavController, private sharedService: SharedService) {
+  constructor(public navCtrl: NavController, private sharedService: SharedService, private localData: LocalDataService) {
   }
 
   ionViewDidLoad() { 
@@ -24,6 +25,45 @@ export class HomePage {
       });
 
     console.log(cordova.plugins.notification.local.getDefaults());
+
+    this.initFCM();
+  }
+
+  initFCM() {
+
+    let user = this.localData.getUser();
+
+    const push = PushNotification.init({
+      android: {
+      },
+      ios: {
+        alert: "true",
+        badge: true,
+        sound: 'true'
+      },
+    });
+
+    push.on('registration', (data) => {
+      console.log("FCM registrationID: " + data.registrationId);
+      console.log("FCM registrationType: " + data.registrationType);
+      push.subscribe(user.id, () => {
+        console.log('success ' + user.id);
+      }, (e) => {
+        console.log('error:', e);
+      });
+    });
+
+    push.on('notification', (data) => {
+      console.log("notification received");
+      console.log(data.message);
+      console.log(data.title);
+      console.log(data.count);
+      console.log(data.sound);
+      console.log(data.image);
+      console.log(data.additionalData);
+
+      this.sharedService.publishOrderTakenNotification(data.additionalData.request);
+    });
   }
 
 }

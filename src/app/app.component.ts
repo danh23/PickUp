@@ -7,6 +7,8 @@ import { HomePage } from '../pages/home/home';
 import { LoginPage } from "../pages/login/login";
 import { UserInputPage } from "../pages/user-input/user-input";
 import { LocalDataService } from "../shared/local-data.service";
+import { AndroidPermissions } from '@ionic-native/android-permissions';
+import { MyOrdersPage } from "../pages/my-orders/my-orders";
 declare var cordova: any, PushNotification: any;
 
 @Component({
@@ -19,10 +21,16 @@ export class MyApp {
   rootPage:any = LoginPage;
   pages: Array<{title: string, component: any}>;
 
-  constructor(private platform: Platform, private statusBar: StatusBar, private splashScreen: SplashScreen, public menuCtrl: MenuController, private localData: LocalDataService) {
+  constructor(private platform: Platform,
+     private statusBar: StatusBar,
+      private splashScreen: SplashScreen,
+       public menuCtrl: MenuController,
+        private localData: LocalDataService,
+        private androidPermissions: AndroidPermissions) {
     this.pages = [
-      { title: 'Hello Ionic', component: HomePage },
-      { title: 'My First List', component: UserInputPage }
+      { title: 'Main', component: HomePage },
+      { title: 'Input page', component: UserInputPage },
+      { title: 'My Orders', component: MyOrdersPage }
     ];
 
     this.initCordova(() => {
@@ -38,12 +46,19 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
       this.statusBar.styleDefault();
       this.splashScreen.hide(); 
+      this.requestPermisions();
       this.listenToNotificationEvents();
-      this.initFCM();
       callback && callback();
     });
   }
 
+  requestPermisions(){
+    this.androidPermissions.requestPermissions([
+      this.androidPermissions.PERMISSION.CAMERA,
+      this.androidPermissions.PERMISSION.ACCESS_FINE_LOCATION
+    ]);
+  }
+  
   listenToNotificationEvents() {
     cordova.plugins.notification.local.on('click', function (notification, eopts) {
       console.log(notification);
@@ -51,41 +66,9 @@ export class MyApp {
     });
   }
 
-  initFCM() {
-    const push = PushNotification.init({
-      android: {
-      },
-      ios: {
-        alert: "true",
-        badge: true,
-        sound: 'false'
-      },
-    });
-
-    push.on('registration', (data) => {
-      console.log("FCM registrationID: " + data.registrationId);
-      console.log("FCM registrationType: " + data.registrationType);
-      push.subscribe('JavaSampleApproach', () => {
-        console.log('success');
-      }, (e) => {
-        console.log('error:', e);
-      });
-    });
-
-    push.on('notification', (data) => {
-      console.log("notification received");
-      console.log(data.message);
-      console.log(data.title);
-      console.log(data.count);
-      console.log(data.sound);
-      console.log(data.image);
-      console.log(data.additionalData);
-    });
-  }
-
-  changePage() {
+  changePage(pageNo: number) {
     this.menuCtrl.close();
-    this.nav.push(UserInputPage);
+    this.nav.push(this.pages[pageNo].component);
   }
 
   logout(){

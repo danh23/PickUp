@@ -27,7 +27,24 @@ export class OrderService {
         .do(data => console.log("Do data: " + JSON.stringify(data)))
         .catch(this.handleError);
         return result;
-    }    
+    }
+    
+    public getOrdersById(orderId: number) {
+        let url = Config.apiUrl + endpoints.getOrderById + "/" + orderId;
+        let result = this.http.get(url, this.options)
+        .map(response => response.json())
+        .do(data => console.log("Do data: " + JSON.stringify(data)))
+        .catch(this.handleError);
+        return result;
+    }
+
+    public deleteOrderById(orderId: number) {
+        let url = Config.apiUrl + endpoints.deleteOrderById + "/" + orderId;
+        let result = this.http.get(url, this.options)
+        .do(data => console.log("Do data: " + JSON.stringify(data)))
+        .catch(this.handleError);
+        return result;
+    }
 
     private handleError(err) {
         let errMessage: string;
