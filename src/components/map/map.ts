@@ -8,12 +8,16 @@ import {
   MarkerOptions,
   Marker,
   ILatLng,
-  Polyline
+  Polyline,
+  MyLocation,
+  Geocoder,
+  GeocoderResult
  } from '@ionic-native/google-maps';
  import { Geolocation } from '@ionic-native/geolocation';
  import { LaunchNavigator, LaunchNavigatorOptions } from "@ionic-native/launch-navigator";
  import { SharedService } from "../../shared/shared-service";
  import { DriverToClientNotification, Location, Order } from "../../shared/order/order";
+ import { OrderService } from "../../shared/order/order-service";
 
  declare var google: any;
 /**
@@ -51,7 +55,24 @@ export class MapComponent implements OnInit{
       zoom: 18,
       tilt: 30,
     },
-    mapType: 'MAP_TYPE_ROADMAP'
+    mapType: 'MAP_TYPE_ROADMAP',
+    styles: [
+      {
+        "featureType": "all",
+        "stylers": [
+          { "color": "#C0C0C0" }
+        ]
+      },{
+        "featureType": "road.arterial",
+        "elementType": "geometry",
+        "stylers": [
+          { "color": "#CCFFFF" }
+        ]
+      },{
+        "featureType": "landscape",
+        "elementType": "labels",
+      }
+    ]
   };
   mapElement: HTMLElement;
   polyline: Polyline;
@@ -59,14 +80,30 @@ export class MapComponent implements OnInit{
 
   order: Order = new Order();
 
-  constructor(private googleMaps: GoogleMaps, private geolocation: Geolocation, private sharedService: SharedService) {
+  constructor(private googleMaps: GoogleMaps,
+     private geolocation: Geolocation,
+      private sharedService: SharedService,
+       private orderService: OrderService,
+      private geocoder: Geocoder) {
     this.sharedService.sendOrder$.subscribe(order => {
       this.end = order.dropOffAddress;
       this.order = order;
     });
     this.sharedService.orderTakenNotification$.subscribe(
       (res: DriverToClientNotification)=>{
-        this.displayRoute({lat: res.driverLocation.latitude, lng: res.driverLocation.longitude}, {lat: this.order.pickUpLocation.latitude, lng: this.order.pickUpLocation.longitude});
+        console.log("notifiction received map component");
+        if(this.order.id != res.orderId){
+          this.orderService.getOrdersById(res.orderId).subscribe((order: Order) =>{
+            this.order = order;
+            this.displayRoute({lat: res.driverLocation.latitude, lng: res.driverLocation.longitude}, {lat: this.order.pickUpLocation.latitude, lng: this.order.pickUpLocation.longitude});
+          });
+        } else{
+          this.displayRoute({lat: res.driverLocation.latitude, lng: res.driverLocation.longitude}, {lat: this.order.pickUpLocation.latitude, lng: this.order.pickUpLocation.longitude});
+        }
+        this.geocodeCoordToAddress({lat: res.driverLocation.latitude, lng: res.driverLocation.longitude}).then(res =>{
+          this.end = res;
+        });  
+        console.log(this.end);
       });
    }
 
@@ -91,9 +128,9 @@ export class MapComponent implements OnInit{
   }
 
   initMap() {
-    this.getCurrentPosition().then((resp) => {
-      this.myLocation.lat = resp.coords.latitude;
-      this.myLocation.lng = resp.coords.longitude;
+    this.getCurrentPosition().then((resp: MyLocation) => {
+      this.myLocation.lat = resp.latLng.lat;
+      this.myLocation.lng = resp.latLng.lng;
       this.moveCamera(this.myLocation);
       this.map.setVisible(true);
       this.map.setClickable(true);
@@ -123,6 +160,10 @@ export class MapComponent implements OnInit{
       });
     }
 
+  moveMarker(marker: Marker, position: ILatLng){
+    marker.setPosition(position);
+  }
+
   moveCamera(location: ILatLng) {
     this.mapOptions.camera.target.lat = location.lat;
     this.mapOptions.camera.target.lng = location.lng;
@@ -143,7 +184,8 @@ export class MapComponent implements OnInit{
   }
 
   getCurrentPosition() {
-    return this.geolocation.getCurrentPosition();
+    return this.map.getMyLocation();
+    //return this.geolocation.getCurrentPosition();
   }
 
   updatePosition() {
@@ -181,11 +223,22 @@ export class MapComponent implements OnInit{
           console.log(polyline);
           this.polyline = polyline
           this.moveCameraWithAnimation(start);
-          this.addMarker(start);
+          if(this.marker === undefined){
+            this.addMarker(start);
+          }
+          else{
+            this.moveMarker(this.marker, start);
+          }
         }) 
       } else {
         window.alert('Directions request failed due to ' + status);
       }
+    });
+  }
+
+  geocodeCoordToAddress(position: ILatLng){
+    return this.geocoder.geocode({position: position}).then((result: GeocoderResult[]) => {
+      return result[0].extra.lines[0];
     });
   }
 

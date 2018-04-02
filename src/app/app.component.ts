@@ -9,7 +9,7 @@ import { UserInputPage } from "../pages/user-input/user-input";
 import { LocalDataService } from "../shared/local-data.service";
 import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { MyOrdersPage } from "../pages/my-orders/my-orders";
-declare var cordova: any, PushNotification: any;
+declare var cordova: any;
 
 @Component({
   templateUrl: 'app.html'
@@ -47,7 +47,6 @@ export class MyApp {
       this.statusBar.styleDefault();
       this.splashScreen.hide(); 
       this.requestPermisions();
-      this.listenToNotificationEvents();
       callback && callback();
     });
   }
@@ -57,13 +56,6 @@ export class MyApp {
       this.androidPermissions.PERMISSION.CAMERA,
       this.androidPermissions.PERMISSION.ACCESS_FINE_LOCATION
     ]);
-  }
-  
-  listenToNotificationEvents() {
-    cordova.plugins.notification.local.on('click', function (notification, eopts) {
-      console.log(notification);
-      console.log(eopts);
-    });
   }
 
   changePage(pageNo: number) {
@@ -75,6 +67,7 @@ export class MyApp {
     this.menuCtrl.close();
     this.localData.logout();
     this.nav.setRoot(LoginPage);
+
   }
 }
 

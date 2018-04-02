@@ -24,8 +24,6 @@ export class HomePage {
       ]
       });
 
-    console.log(cordova.plugins.notification.local.getDefaults());
-
     this.initFCM();
   }
 
@@ -35,11 +33,15 @@ export class HomePage {
 
     const push = PushNotification.init({
       android: {
+        sound: false,
+        vibrate: false,
+        clearNotifications: true,
+        forceShow: true
       },
       ios: {
-        alert: "true",
+        alert: true,
         badge: true,
-        sound: 'true'
+        sound: true
       },
     });
 
@@ -54,7 +56,7 @@ export class HomePage {
     });
 
     push.on('notification', (data) => {
-      console.log("notification received");
+      console.log("notification received home page");
       console.log(data.message);
       console.log(data.title);
       console.log(data.count);

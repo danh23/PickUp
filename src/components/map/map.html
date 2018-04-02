@@ -6,7 +6,6 @@
                 <ion-input id="dropoff" type="text" [(ngModel)]="end"></ion-input>
             </ion-item>
         </ion-list>
-        <button *ngIf="end != undefined && end != ''" ion-button (tap)="calculateAndDisplayRoute()">Navigate</button>
     </ion-card-content>
 </ion-card>
 <div #map id="map"></div>
