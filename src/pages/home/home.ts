@@ -36,7 +36,8 @@ export class HomePage {
         sound: false,
         vibrate: false,
         clearNotifications: true,
-        forceShow: true
+        //not working with true
+        forceShow: false
       },
       ios: {
         alert: true,
@@ -49,6 +50,7 @@ export class HomePage {
       console.log("FCM registrationID: " + data.registrationId);
       console.log("FCM registrationType: " + data.registrationType);
       push.subscribe(user.id, () => {
+        console.log(push);
         console.log('success ' + user.id);
       }, (e) => {
         console.log('error:', e);
@@ -62,8 +64,43 @@ export class HomePage {
       console.log(data.count);
       console.log(data.sound);
       console.log(data.image);
-      console.log(data.additionalData);
+      console.log(data.additionalData);     
 
+      if(data.additionalData.request.scope == "START"){
+        push.options.android.sound = false;
+        push.options.android.vibrate = false;
+        push.options.android.clearBadge = true;
+
+        push.options.ios.alert = false;
+        push.options.ios.badge = false;
+        push.options.ios.sound = false;
+
+        push.subscribe("updateLocation/"+user.id, () => {
+          console.log('success ' + user.id);
+        }, (e) => {
+          console.log('error:', e);
+        });
+      }
+
+      if(data.additionalData.request.scope == "FINISH"){
+        push.options.android.sound = true;
+        push.options.android.vibrate = true;
+        push.options.android.clearBadge = false;
+
+        push.options.ios.alert = true;
+        push.options.ios.badge = true;
+        push.options.ios.sound = true;
+
+        push.unsubscribe("updateLocation-"+user.id,
+          () => {
+            console.log('success');
+          },
+          e => {
+            console.log('error:', e);
+          }
+        );
+      }
+      
       this.sharedService.publishOrderTakenNotification(data.additionalData.request);
     });
   }

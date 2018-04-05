@@ -79,6 +79,7 @@ export class MapComponent implements OnInit{
   marker: Marker;
 
   order: Order = new Order();
+  estimatedTime: string;
 
   constructor(private googleMaps: GoogleMaps,
      private geolocation: Geolocation,
@@ -100,6 +101,7 @@ export class MapComponent implements OnInit{
         } else{
           this.displayRoute({lat: res.driverLocation.latitude, lng: res.driverLocation.longitude}, {lat: this.order.pickUpLocation.latitude, lng: this.order.pickUpLocation.longitude});
         }
+        this.estimatedTime = res.estimatedTime;
         this.geocodeCoordToAddress({lat: res.driverLocation.latitude, lng: res.driverLocation.longitude}).then(res =>{
           this.end = res;
         });  

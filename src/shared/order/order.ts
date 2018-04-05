@@ -45,6 +45,8 @@ export class DriverToClientNotification {
     orderId: number;
     orderTitle: string;
     driverLocation: Location;
+    scope: string;
+    estimatedTime: string;
 
     constructor(){
         this.driverLocation = new Location();
