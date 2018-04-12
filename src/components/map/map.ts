@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnInit, NgZone } from '@angular/core';
 import {
   GoogleMaps,
   GoogleMap,
@@ -79,13 +79,14 @@ export class MapComponent implements OnInit{
   marker: Marker;
 
   order: Order = new Order();
-  estimatedTime: string;
+  estimatedTime: string = "00:00";
 
   constructor(private googleMaps: GoogleMaps,
      private geolocation: Geolocation,
       private sharedService: SharedService,
        private orderService: OrderService,
-      private geocoder: Geocoder) {
+      private geocoder: Geocoder,
+      private zone: NgZone,) {
     this.sharedService.sendOrder$.subscribe(order => {
       this.end = order.dropOffAddress;
       this.order = order;
@@ -101,7 +102,6 @@ export class MapComponent implements OnInit{
         } else{
           this.displayRoute({lat: res.driverLocation.latitude, lng: res.driverLocation.longitude}, {lat: this.order.pickUpLocation.latitude, lng: this.order.pickUpLocation.longitude});
         }
-        this.estimatedTime = res.estimatedTime;
         this.geocodeCoordToAddress({lat: res.driverLocation.latitude, lng: res.driverLocation.longitude}).then(res =>{
           this.end = res;
         });  
@@ -222,7 +222,6 @@ export class MapComponent implements OnInit{
           color: "black",
           width: 10
         }).then((polyline) => {
-          console.log(polyline);
           this.polyline = polyline
           this.moveCameraWithAnimation(start);
           if(this.marker === undefined){
@@ -231,7 +230,11 @@ export class MapComponent implements OnInit{
           else{
             this.moveMarker(this.marker, start);
           }
-        }) 
+        });
+        this.zone.run(() => {
+          this.estimatedTime = response.routes[0].legs[0].duration.text
+          console.log("estimated time:  " + this.estimatedTime);
+        });
       } else {
         window.alert('Directions request failed due to ' + status);
       }

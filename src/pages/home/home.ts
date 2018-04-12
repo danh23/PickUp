@@ -75,7 +75,7 @@ export class HomePage {
         push.options.ios.badge = false;
         push.options.ios.sound = false;
 
-        push.subscribe("updateLocation/"+user.id, () => {
+        push.subscribe("updateLocation-"+user.id, () => {
           console.log('success ' + user.id);
         }, (e) => {
           console.log('error:', e);
