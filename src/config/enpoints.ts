@@ -6,4 +6,7 @@ export const endpoints = {
 
         createUser: "/user/create",
         getUserByEmail: "/user/getUserByEmail",
+        getUserByEmailOrUsername: "/user/getUserByEmailOrUsername",
+
+        notifyClient: "/pushNotification/notifyClient"
 }

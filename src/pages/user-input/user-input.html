@@ -15,19 +15,19 @@
         </ion-item>
         <ion-item>
         <ion-label floating>Pick up location</ion-label>
-        <ion-input id="pickup" type="text" [(ngModel)]="inputs.pickUpAddress"></ion-input>
+        <ion-input id="pickup" type="text" [(ngModel)]="inputs.pickUpAddress"  (click)="chooseItemPickupAdress(item)"></ion-input>
         </ion-item>
         <ion-item>
-            <ion-label>PickUp Date</ion-label>
+            <ion-label floating>PickUp Date</ion-label>
             <ion-datetime displayFormat="MM/DD/YYYY" min="2017" [(ngModel)]="inputs.pickUpDate"></ion-datetime>
         </ion-item>
         <ion-item>
-            <ion-label>DropOff Date</ion-label>
+            <ion-label floating>DropOff Date</ion-label>
             <ion-datetime displayFormat="MM/DD/YYYY" min="2017" [(ngModel)]="inputs.dropOffDate"></ion-datetime>
         </ion-item>
         <ion-item>
         <ion-label floating>Drop off location</ion-label>
-        <ion-input id="dropoff" type="text" [(ngModel)]="inputs.dropOffAddress"></ion-input>
+        <ion-input id="dropoff" type="text" [(ngModel)]="inputs.dropOffAddress"  (click)="chooseItemDropoffAdress(item)"></ion-input>
         </ion-item> 
         <ion-item>
             <ion-label floating>Height</ion-label>

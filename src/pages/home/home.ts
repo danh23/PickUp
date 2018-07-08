@@ -3,6 +3,7 @@ import { NavController } from 'ionic-angular';
 import { MenuController, IonicPage } from 'ionic-angular';
 import { SharedService } from "../../shared/shared-service";
 import { LocalDataService } from "../../shared/local-data.service";
+import { WebSocketService } from '../../shared/webSocket.service';
 declare var cordova: any, PushNotification: any;
 
 @Component({
@@ -11,7 +12,7 @@ declare var cordova: any, PushNotification: any;
 })
 export class HomePage {
 
-  constructor(public navCtrl: NavController, private sharedService: SharedService, private localData: LocalDataService) {
+  constructor(public navCtrl: NavController, private webSocketService: WebSocketService, private sharedService: SharedService, private localData: LocalDataService) {
   }
 
   ionViewDidLoad() { 
@@ -29,6 +30,8 @@ export class HomePage {
 
   initFCM() {
 
+    
+
     let user = this.localData.getUser();
 
     const push = PushNotification.init({
@@ -45,6 +48,10 @@ export class HomePage {
         sound: true
       },
     });
+
+    cordova.plugins.notification.local.on('yes', function (notification, eopts) { 
+      console.log('dfsf');
+     });
 
     push.on('registration', (data) => {
       console.log("FCM registrationID: " + data.registrationId);

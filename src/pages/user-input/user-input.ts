@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef, AfterViewInit, Output, EventEmitter, OnInit } from '@angular/core';
-import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController, ViewController } from 'ionic-angular';
 import { Order, Location } from "../../shared/order/order";
 import { SharedService } from "../../shared/shared-service";
 import { OrderService } from "../../shared/order/order-service";
@@ -28,8 +28,13 @@ export class UserInputPage {
 
   inputs: Order = new Order();
   geocode = new google.maps.Geocoder;
+  options = {
+    componentRestrictions: {country: 'ro'}
+  };
 
-  constructor(public navCtrl: NavController,
+  constructor(
+    public viewCtrl: ViewController,
+    public navCtrl: NavController,
      public navParams: NavParams,
       private sharedService: SharedService,
        private orderService: OrderService,
@@ -39,17 +44,34 @@ export class UserInputPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad UserInputPage'); 
-    this.startLocationInput = <HTMLInputElement>document.getElementById('pickup').getElementsByTagName('input')[0];
-    this.startAutocomplete = new google.maps.places.Autocomplete(this.startLocationInput);
-    this.endLocationInput = <HTMLInputElement>document.getElementById('dropoff').getElementsByTagName('input')[0];
-    this.endAutocomplete = new google.maps.places.Autocomplete(this.endLocationInput);
+    var x =  new google.maps.places.Autocomplete((
+        document.getElementById('pickup').getElementsByTagName('input')[0]), this.options);
+    google.maps.event.addListener(x, 'place_changed', function ()    {
+          this.startLocationInput = x.getPlace();
+          this.inputs.pickUpAddress = x.getPlace();
+           });
+    var y =  new google.maps.places.Autocomplete((
+        document.getElementById('dropoff').getElementsByTagName('input')[0]), this.options);
+    google.maps.event.addListener(y, 'place_changed', function ()    {
+           this.endLocationInput = y.getPlace();
+           });
+  
+
   }
+
+  chooseItemPickupAdress(item){
+    this.viewCtrl.dismiss(item);
+    this.inputs.pickUpAddress = item;
+  }
+
+  
 
   sendOrder() {
     this.inputs.userId = this.localData.getUser().id;
     this.geocode.geocode({
       "address": this.inputs.pickUpAddress
       }, (results) => {
+        console.log(results);
         if(results.length){
           this.inputs.pickUpLocation.latitude = results[0].geometry.location.lat();
           this.inputs.pickUpLocation.longitude = results[0].geometry.location.lng();

@@ -17,6 +17,8 @@ export class UserProvider {
 
     register(user: User) {
       let url = Config.apiUrl + endpoints.createUser
+
+      //console.log(url);
       let result = this.http.post(url, user, this.options)
       .map((response: Response) => <number>response.json())
       .do(data => console.log("Do data: " + JSON.stringify(data)))
@@ -24,12 +26,13 @@ export class UserProvider {
       return result;
     }
 
-    login(email: string) {
-      let url = Config.apiUrl + endpoints.getUserByEmail;
-      let result = this.http.post(url, email, this.options)
+    login(value: string) {
+      let url = Config.apiUrl + endpoints.getUserByEmailOrUsername;
+      let result = this.http.post(url, value, this.options)
       .map((response: Response) => response.json())
       .do(data => console.log("Do data: " + JSON.stringify(data)))
       .catch(this.handleError);
+      //console.log(result);
       return result;
     }
   

@@ -18,6 +18,8 @@ import {
  import { SharedService } from "../../shared/shared-service";
  import { DriverToClientNotification, Location, Order } from "../../shared/order/order";
  import { OrderService } from "../../shared/order/order-service";
+import { NavController } from 'ionic-angular';
+import { UserInputPage } from '../../pages/user-input/user-input';
 
  declare var google: any;
 /**
@@ -86,7 +88,8 @@ export class MapComponent implements OnInit{
       private sharedService: SharedService,
        private orderService: OrderService,
       private geocoder: Geocoder,
-      private zone: NgZone,) {
+      private zone: NgZone,
+    private nav: NavController) {
     this.sharedService.sendOrder$.subscribe(order => {
       this.end = order.dropOffAddress;
       this.order = order;
@@ -163,7 +166,7 @@ export class MapComponent implements OnInit{
     }
 
   moveMarker(marker: Marker, position: ILatLng){
-    marker.setPosition(position);
+    this.zone.run(()=>marker.setPosition(position));
   }
 
   moveCamera(location: ILatLng) {
@@ -245,6 +248,11 @@ export class MapComponent implements OnInit{
     return this.geocoder.geocode({position: position}).then((result: GeocoderResult[]) => {
       return result[0].extra.lines[0];
     });
+  }
+
+  clickDropoff(){
+
+    return this.nav.push(UserInputPage);
   }
 
 }

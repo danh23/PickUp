@@ -24,12 +24,34 @@ import { MyOrdersPageModule } from "../pages/my-orders/my-orders.module";
 import { UserInputPageModule } from "../pages/user-input/user-input.module";
 import { OrderDetailsPageModule } from "../pages/order-details/order-details.module";
 import { AndroidPermissions } from "@ionic-native/android-permissions";
+import { RegisterPage } from '../pages/register/register';
+import { StompConfig, StompService} from '@stomp/ng2-stompjs';
+import { WebSocketService } from '../shared/webSocket.service';
+
+import * as SockJS from 'sockjs-client';
+
+export function socketProvider() {
+  return new SockJS('http://localhost:8082/Pickup/socket');
+}
+
+const stompConfig: StompConfig = {
+  url: socketProvider,
+  headers: {
+    login: 'guest',
+    passcode: 'guest'
+  },
+  heartbeat_in: 0, 
+  heartbeat_out: 20000, 
+  reconnect_delay: 5000,
+  debug: true
+};
 
 @NgModule({
   declarations: [
     MyApp,
     LoginPage,
     HomePage,
+    RegisterPage
   ],
   imports: [
     BrowserModule,
@@ -49,9 +71,16 @@ import { AndroidPermissions } from "@ionic-native/android-permissions";
     MyApp,
     LoginPage,
     HomePage,
+    RegisterPage,
   ],
   providers: [
     LocalDataService,
+    StompService,
+    {
+      provide: StompConfig,
+      useValue: stompConfig
+    },
+    WebSocketService,
     StatusBar,
     SplashScreen,
     GoogleMaps,

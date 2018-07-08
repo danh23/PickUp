@@ -4,6 +4,7 @@ import { UserProvider } from "../../providers/user/user";
 import { User } from "../../shared/user/user";
 import { HomePage } from "../home/home";
 import { LocalDataService } from "../../shared/local-data.service";
+import { RegisterPage } from '../register/register';
 
 declare var facebookConnectPlugin: any;
 
@@ -13,7 +14,7 @@ declare var facebookConnectPlugin: any;
 })
 export class LoginPage {
 
-  email: string;
+  value: string;
   password: string;
   user: User = new User();
   isLoggingIn = true;
@@ -24,15 +25,13 @@ export class LoginPage {
   }
 
   submit() {
-    if (this.isLoggingIn) {
-      this.login();
-    } else {
-      this.signUp();
-    }
+      this.navCtrl.push(RegisterPage);
   }
 
   login() {
-    this.userService.login(this.email).subscribe(
+
+    //console.log(this.value);
+    this.userService.login(this.value).subscribe(
       (res) => {
         this.user = res;
         this.localData.login(res);
@@ -44,23 +43,9 @@ export class LoginPage {
 
   toggleDisplay() {
     this.isLoggingIn = !this.isLoggingIn;
-    //let container = this.container.nativeElement;
-    // container.animate({
-    //   backgroundColor: this.isLoggingIn ? 'red' : 'gray',
-    //   duration: 200
-    // });
   }
 
-  signUp() {
-    this.userService.register(this.user)
-      .subscribe(
-        () => {
-          alert("Your account was successfully created.");
-          this.toggleDisplay();
-        },
-        () => alert("Unfortunately we were unable to create your account.")
-      );
-  }
+ 
 
   fbLogin() {
     facebookConnectPlugin.login(["public_profile"], function(userData) {

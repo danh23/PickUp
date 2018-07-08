@@ -9,6 +9,9 @@ import { UserInputPage } from "../pages/user-input/user-input";
 import { LocalDataService } from "../shared/local-data.service";
 import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { MyOrdersPage } from "../pages/my-orders/my-orders";
+import * as Stomp from 'stompjs';
+import * as SockJS from 'sockjs-client';
+
 declare var cordova: any;
 
 @Component({
@@ -16,10 +19,19 @@ declare var cordova: any;
 })
 export class MyApp {
 
+  private serverUrl = 'http://localhost:8082/Pickup'
+  private title = 'WebSockets chat';
+  private stompClient;
+
   @ViewChild('content') nav: NavController;
 
-  rootPage:any = LoginPage;
+  rootPage:any = HomePage;
   pages: Array<{title: string, component: any}>;
+  headers = {
+    login : 'client@test.ro',
+    passcode: '12345'
+  }
+
 
   constructor(private platform: Platform,
      private statusBar: StatusBar,
@@ -34,10 +46,12 @@ export class MyApp {
     ];
 
     this.initCordova(() => {
-      if(this.localData.checkIsLoggedIn() === "true"){
+     // if(this.localData.checkIsLoggedIn() === "true"){
         this.rootPage = HomePage;
-      }
+     // }
     });
+
+    this.initializeWebSocketConnection();
   }
 
   initCordova(callback) {
@@ -69,5 +83,37 @@ export class MyApp {
     this.nav.setRoot(LoginPage);
 
   }
+
+  initializeWebSocketConnection(){
+    console.log("A intrat la sockjs");
+    let ws = new SockJS(this.serverUrl);
+   
+    this.stompClient = Stomp.over(ws);
+    console.log(this.stompClient);
+    let that = this;
+    this.stompClient.connect(this.headers, this.connect_callback, this.error_callback, function(frame) {
+      //console.log('Connected: ' + frame);
+      window.alert('Connected: ' + frame);
+     // this.stompClient.subscribe('/topic/message', function(message){
+      //    this.sendMessage(JSON.parse(message.body).content);
+      //});
+  });
+  }
+
+  sendMessage(message){
+    window.alert('Mesajul: ' + message);
+   // this.stompClient.send("/app/send/message" , {}, message);
+    
+  }
+
+  connect_callback(){
+    console.log("s-a conectat la server");
+
+  }
+
+  error_callback(error){
+    console.log(error);
+}
+
 }
 

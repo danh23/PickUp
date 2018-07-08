@@ -3,7 +3,7 @@
         <ion-list>            
             <ion-item>
                 <ion-label floating>Driver location</ion-label>
-                <ion-input id="dropoff" type="text" [(ngModel)]="end"></ion-input>
+                <ion-input id="dropoff" type="text" (tap)="clickDropoff()"></ion-input>
             </ion-item>
         </ion-list>
     </ion-card-content>

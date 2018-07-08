@@ -5,6 +5,7 @@ import { AppModule } from "../app/app.module";
 import { MapControlsComponent } from './map-controls/map-controls';
 import { IonicModule } from "ionic-angular";
 import { SharedService } from "../shared/shared-service";
+import { StompService } from 'ng2-stomp-service';
 @NgModule({
 	declarations: [
 		MapComponent,
@@ -20,7 +21,8 @@ import { SharedService } from "../shared/shared-service";
     MapControlsComponent,
 	],
 	providers: [
-		SharedService
+		SharedService,
+		StompService
 	]
 })
 export class ComponentsModule {}
